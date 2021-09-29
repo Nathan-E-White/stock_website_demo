@@ -1,6 +1,5 @@
 import * as React from "react";
-
-import ChartItem from "./ChartItem";
+import ChartItem  from "./ChartItem";
 
 export const ChartTable = ({chart}: any) => {
 
@@ -28,7 +27,7 @@ export const ChartTable = ({chart}: any) => {
                 </tr>
                 </thead>
                 <tbody>
-                {chart.map(chartMap)}
+                {chart.map (chartMap)}
                 </tbody>
             </table>
         </div>
