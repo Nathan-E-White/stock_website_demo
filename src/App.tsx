@@ -319,7 +319,7 @@ class App extends React.Component <IAppProps, IAppState> {
                                         <h2 className="text-center">Previous Quotes</h2>
                                         {quoteHistoryReverse.map ((quoteHistoryItem, index) => {
                                             return (
-                                                <div key={"quote" + index}>
+                                                <div key={`quote + ${index}`}>
                                                     <StockInfo {...quoteHistoryItem} />
                                                     <hr/>
                                                 </div>
@@ -330,7 +330,7 @@ class App extends React.Component <IAppProps, IAppState> {
                             </div>
 
                             <div className="mt-5">
-                                <h2>{!!companyName && "News about " + companyName}</h2>
+                                <h2>{!!companyName && `News about " + ${companyName}`}</h2>
                                 {!showAllNews && !!newsMin && <NewsList news={newsMin}/>}
                                 {showAllNews && !!news && (
                                     <div>
@@ -350,7 +350,7 @@ class App extends React.Component <IAppProps, IAppState> {
                             {!!chart && (
                                 <div className="charts">
                                     <h2 className="text-center">
-                                        {!!companyName && companyName + " (Past 6 months)"}
+                                        {!!companyName && `${companyName} (Past 6 months)`}
                                     </h2>
 
 
