@@ -219,8 +219,8 @@ class App extends React.Component <IAppProps, IAppState> {
                 chart = st.chart;
                 chartReverse = [...chart].reverse ();
                 chartReverseMin = chartReverse.slice (0, 12);
-                let chartCloses = [];
-                let chartDates = [];
+                const chartCloses = [];
+                const chartDates = [];
                 chart.map ((chartItem: { label: any; close: any; }) => {
                     chartDates.push (chartItem.label);
                     chartCloses.push (chartItem.close);
