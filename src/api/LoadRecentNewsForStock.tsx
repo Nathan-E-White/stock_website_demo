@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 export const LoadRecentNewsForStock = (symbol: string, version: string, token: string) => {
 

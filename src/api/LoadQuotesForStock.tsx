@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 export const LoadQuotesForStock = (symbol: string = "", version: string = "sandbox", token: string = "") => {
 
