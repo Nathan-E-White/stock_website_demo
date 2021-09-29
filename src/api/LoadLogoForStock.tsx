@@ -28,4 +28,5 @@ export const LoadLogoForStock = (symbol: string, version: string, token: string)
               .catch (errCat);
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default LoadLogoForStock;

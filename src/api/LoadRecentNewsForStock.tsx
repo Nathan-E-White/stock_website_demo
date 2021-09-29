@@ -23,4 +23,5 @@ export const LoadRecentNewsForStock = (symbol: string, version: string, token: s
               .catch (errCat);
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default LoadRecentNewsForStock;

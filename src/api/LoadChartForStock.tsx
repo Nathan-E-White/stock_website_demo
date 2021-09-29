@@ -23,4 +23,5 @@ export const LoadChartForStock = (symbol: string, version: string, token: string
               .catch (errCat);
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default LoadChartForStock;
