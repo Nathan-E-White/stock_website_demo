@@ -1,6 +1,6 @@
-import * as React                                  from "react";
-import {ChangeEvent, Component}                    from "react";
-import {Button, Form, Container, Input, FormGroup} from "semantic-ui-react";
+import * as React                                  from 'react';
+import {ChangeEvent, Component}                    from 'react';
+import {Button, Form, Container, Input, FormGroup} from 'semantic-ui-react';
 
 
 interface ISymbolFormProps {
