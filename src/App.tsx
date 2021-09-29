@@ -255,7 +255,11 @@ class App extends React.Component <IAppProps, IAppState> {
 
                         <Text color="black" italic large>
                             Your new dashboard serving up just the latest stock data:
-                            <a href="https://iexcloud.io" title="IEX Required data disclaimer.">Data provided by IEX Cloud</a>
+                            <a
+                                href="https://iexcloud.io"
+                                title="IEX Required data disclaimer.">
+                                Data provided by IEX Cloud
+                            </a>
                         </Text>
 
                         <div className="row">
