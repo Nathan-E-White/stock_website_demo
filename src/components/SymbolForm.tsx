@@ -32,9 +32,7 @@ class SymbolForm extends Component<ISymbolFormProps, ISymbolFormState> {
 
     render () {
 
-        // @ts-ignore
         const symbol = this.props.symbol;
-        // @ts-ignore
         const submittedSymbol = this.props.submittedSymbol;
 
         return (
@@ -62,4 +60,5 @@ class SymbolForm extends Component<ISymbolFormProps, ISymbolFormState> {
     }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default SymbolForm;
