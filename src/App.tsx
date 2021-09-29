@@ -1,7 +1,13 @@
 import * as React     from 'react';
 // import * as Redis from "redis";
-import './App.css';
 
+import {css} from 'styled-components';
+import {Heading, Text} from "react-super-styled";
+
+// @ts-ignore
+import AppCss from  "./App.css";
+
+const PageTitle = AppCss.PageTitle;
 
 import GetStockData   from "./api/LoadQuotesForStock";
 import GetStockLogo   from "./api/LoadLogoForStock";
@@ -282,13 +288,20 @@ class App extends React.Component <IAppProps, IAppState> {
         //      chartData={chartCloses}
         //  />
 
+        // <h1 className="display-3">Stock Market App via React</h1>
         return (
             <div className="App pb-3">
                 <div className="jumbotron jumbotron-fluid bg-dark text-light">
                     <div className="container">
-                        <h1 className="display-3">Stock Market App via React</h1>
-                        <p className="lead">Your new dashboard serving up just the latest stock data: <a
-                            href="https://iexcloud.io">Data provided by IEX Cloud</a></p>
+
+                        <Heading as="h2" center color="gold" margin={0} italic underline xxLarge className={PageTitle}>
+                            Stock Market App via React
+                        </Heading>
+
+                        <Text color="gold" center italic large>
+                            Your new dashboard serving up just the latest stock data:
+                            <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
+                        </Text>
 
                         <div className="row">
                             <div className="col input-group">
