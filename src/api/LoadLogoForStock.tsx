@@ -13,7 +13,6 @@ export const LoadLogoForStock = (symbol: string, version: string, token: string)
             } else {
                 throw Error (`API Error: GET Request wasn't empty but did not include desired payload.`);
             }
-
         } else {
             throw Error (`API Error: GET Request returned no data.`);
         }
@@ -23,7 +22,7 @@ export const LoadLogoForStock = (symbol: string, version: string, token: string)
         console.log (`API Error <LoadLogoForStock>: ${err.message}`);
     };
 
-    return api.get (`stock/${symbol}/logo?token=${token}`)
+    api.get (`stock/${symbol}/logo?token=${token}`)
               .then (apiGet)
               .catch (errCat);
 };

@@ -1,14 +1,11 @@
-import * as React from 'react';
+import * as React     from 'react';
 import './App.css';
 
-import LoadQuotesForStock     from "./api/LoadQuotesForStock";
-import LoadLogoForStock       from "./api/LoadLogoForStock";
-import LoadRecentNewsForStock from "./api/LoadRecentNewsForStock";
-import LoadChartForStock      from "./api/LoadChartForStock";
-import {StockInfo}            from './components/StockInfo';
-import {NewsList}             from './components/NewsList';
-import {ChartLineGraph}       from './components/ChartLineGraph';
-import {ChartTable}           from './components/ChartTable';
+
+import GetStockData from "./api/LoadQuotesForStock";
+import GetStockLogo from "./api/LoadLogoForStock";
+import GetStockNews from "./api/LoadRecentNewsForStock";
+import GetStockChar from "./api/LoadChartForStock";
 
 
 //const FormEditor = require ("./components/FormEditor");
@@ -22,7 +19,7 @@ import {ChartTable}           from './components/ChartTable';
 // noinspection JSUnusedLocalSymbols
 const apiSandboxToken: string = "Tpk_c86ba05004a64fd8b43b29929c446e2c";
 const productionToken: string = "pk_9d26fd1fee7d490986975ab1ef317b8b";
-const useToken: string = productionToken;
+const useToken = productionToken;
 
 interface IAppProps {
 //    error?: any;
@@ -48,6 +45,7 @@ interface IAppState {
     showAllNews: boolean;
     showAllChart: boolean;
     logo: string;
+    logoURL: URL;
 }
 
 // noinspection JSClassNamingConvention
@@ -70,23 +68,39 @@ class App extends React.Component <IAppProps, IAppState> {
             chart:         [],
             showAllNews:   false,
             showAllChart:  false,
-            logo:          ""
+            logo:          "",
+            logoURL:       null
         };
     }
 
-    //render () {
-    //    return (
-    //        <div className="App">
-    //            <SymbolForm
-    //                onSymbolChange={this.handleSymbolChange.bind(this)}
-    //                onSymbolSubmit={this.handleSymbolSubmit.bind(this)}
-    //                symbol={this.state.symbol}
-    //                submittedSymbol={this.state.submittedSymbol}
-    //            />
-    //        </div>
-    //    );
-    //}
+    errCat = (error: Error, fName: string) => {
+        console.log (`Error ${fName}: ${error.name}, ${error.message}`);
+        this.setState ({error: error});
+    };
 
+    errCatQuote = (error: Error) => this.errCat (error, "GetQuote");
+
+    setLogoURL = () => {
+        /* Build the URL for the logo from the API return value */
+        const url = new URL (this.state.logo);
+
+        /* Force https */
+        if (url.protocol !== 'https') {
+            url.protocol = 'https';
+        }
+
+        this.setState ({
+            logoURL: new URL (url.toString ()),
+        });
+    };
+
+
+    applyAsync = (acc: any, val: any) => acc.then (val);
+
+    // noinspection AnonymousFunctionJS
+    composeAsync = (...funcs: any) => x => {
+        return funcs.reduce (this.applyAsync, Promise.resolve (x));
+    };
 
     componentDidMount () {
         this.loadQuote ();
@@ -94,65 +108,42 @@ class App extends React.Component <IAppProps, IAppState> {
 
     loadQuote = () => {
 
-        const enteredSymbol: string = "XOM";
+        const nxtSym: string = "XOM";
 
+        const pullData = this.composeAsync (GetStockData, GetStockLogo, GetStockNews, GetStockChar);
+        const quoteRes = pullData (nxtSym)
+            .then (this.pushData)
+            .catch (this.errCatQuote);
+
+        const pushPrev = (previousState: any, quoteWithLogo: any, news: any, chart: any) => {
+            const history = previousState?.quoteHistory ?? [];
+            history.push ({...quoteWithLogo});
+            return {
+                quote:        quoteWithLogo,
+                error:        null,
+                quoteHistory: history,
+                news:         news,
+                chart:        chart,
+            };
+        };
+
+        const retDes = (values: any) => {
+            const [quote, logo, news, chart] = values;
+            const quoteWithLogo = {...quote, logo: logo};
+            const nxtState = pushPrev (this.state, quoteWithLogo, news, chart);
+            this.setState (nxtState);
+        };
+
+        /* Note: Promise.all([f, g, ...]) runs f, g, ... in parallel async */
         Promise.all ([
-                   LoadQuotesForStock (enteredSymbol, "stable", useToken),
-                   LoadLogoForStock (enteredSymbol, "stable", useToken),
-                   LoadRecentNewsForStock (enteredSymbol, "stable", useToken),
-                   LoadChartForStock (enteredSymbol, "6m", useToken)
+                   GetStockData (nxtSym, "stable", useToken),
+                   GetStockLogo (nxtSym, "stable", useToken),
+                   GetStockNews (nxtSym, "stable", useToken),
+                   GetStockChar (nxtSym, "stable", useToken)
                ])
-               .then ((values: any) => {
-                   const [quote, logo, news, chart] = values;
-                   // const quoteWithLogo = {...quote, logo: logo};
+               .then (retDes)
+               .catch ((err: Error) => this.errCat (err, "GetQuote"));
 
-                   this.setState ({
-                       news:  news,
-                       chart: chart,
-                       quote: quote,
-                       logo:  logo,
-                   });
-                   // this.setState((prevState: any) => { setState({}
-                   //           this.setState ((prevState: any) => {
-                   //                   if (prevState !== null) {
-                   //                     if (prevState.hasOwnProperty ("quoteHistory")) {
-                   //                             const history = prevState.quoteHistory;
-                   //            history.push ({...quoteWithLogo});
-                   //            return {
-                   //                quote:        quoteWithLogo,
-                   //                error:        null,
-                   //                quoteHistory: history,
-                   //                news:         news,
-                   //                chart:        chart
-                   //            };
-                   //        }
-                   //    }
-                   // });
-               })
-               .catch ((error: any) => {
-
-                   if (error.hasOwnProperty ("response")) {
-                       if (error.response.hasOwnProperty ("status")) {
-                           if (error.response.status === 404) {
-                               const newError = new Error (`The symbol ${enteredSymbol} could not be found.`);
-                               this.setState ({error: newError});
-                           } else {
-                               const msg = `Error <LoadQuote>: Caught error status ${error.response.status}`;
-                               const newError = new Error (msg);
-                               this.setState ({error: newError});
-                           }
-                       } else {
-                           const msgChunkLHS = "Error <LoadQuote>: Caught error but could not read status";
-                           const msgChunkRHS = `code: ${error.message}`;
-                           const msg = `${msgChunkLHS} ${msgChunkRHS}`;
-                           const newError = new Error (msg);
-                       }
-                   } else {
-                       const msg = `Error <LoadQuote>: Unknown error ${error.message}`;
-                       const newError = new Error (msg);
-                       this.setState ({error: newError});
-                   }
-               });
     };
 
     onChangeEnteredSymbol = (event: any) => {
@@ -169,7 +160,8 @@ class App extends React.Component <IAppProps, IAppState> {
     };
 
     onKeyDownPressEnter = (event: any) => {
-        if (event.keyCode === 13) {
+        // noinspection MagicNumberJS
+        if (event.keyCode === 0xD) {
             this.loadQuote ();
         }
     };
