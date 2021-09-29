@@ -1,6 +1,4 @@
 import * as React          from "react";
-// import {Line as LineChart} from "react-chartjs-2";
-// import "react-chartjs-2";
 
 interface IChartLineGraph {
     title: string;
