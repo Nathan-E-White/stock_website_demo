@@ -1,6 +1,6 @@
 import * as React          from "react";
-import {Line as LineChart} from "react-chartjs-2";
-import "react-chartjs-2";
+// import {Line as LineChart} from "react-chartjs-2";
+// import "react-chartjs-2";
 
 interface IChartLineGraph {
     title: string;
@@ -31,7 +31,8 @@ export const ChartLineGraph = (clg: IChartLineGraph) => {
         }
     };
 
-    return <LineChart data={cData} options={cOptions}/>;
+    return <div className="LineChart">{}</div>
+    // return <LineChart data={cData} options={cOptions}/>;
 };
 
 export default ChartLineGraph;
