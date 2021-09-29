@@ -7,10 +7,10 @@ export const LoadRecentNewsForStock = (symbol: string, version: string, token: s
     });
 
     return api.get (`stock/${symbol}/news?token=${token}`)
-              .then ((res: any) => {
+              .then ((res: any): any => {
                   return res.data;
-              })
-              .catch ((err: Error) => {
+              }) // noinspection ChainedFunctionCallJS
+              .catch ((err: Error): void => {
                   console.log (`API Error <LoadRecentNewsForStock>: ${err.message}`);
               });
 };
