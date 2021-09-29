@@ -157,7 +157,7 @@ class App extends React.Component <IAppProps, IAppState> {
     };
 
 
-    render () {
+    render (): JSX.Element {
 
         const st: IAppState = this.state;
 
