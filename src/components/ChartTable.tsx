@@ -28,4 +28,5 @@ export const ChartTable = ({chart}: any) => (
     </div>
 );
 
+// noinspection JSUnusedGlobalSymbols
 export default ChartTable;
