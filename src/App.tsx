@@ -107,39 +107,6 @@ class App extends React.Component <IAppProps, IAppState> {
 
         const nxtSym: string = "XOM";
 
-        //const pullData = this.composeAsync (GetStockData, GetStockLogo, GetStockNews, GetStockChar);
-        //const quoteRes = pullData (nxtSym)
-        //    .catch (this.errCatQuote);
-
-        //const pushPrev = (previousState: any, quoteWithLogo: any, news: any, chart: any) => {
-         //   const history = previousState?.quoteHistory ?? [];
-         //   history.push ({...quoteWithLogo});
-         //   return {
-         //       quote:        quoteWithLogo,
-         //       error:        null,
-         //       quoteHistory: history,
-         //       news:         news,
-         //       chart:        chart,
-        //    };
-        //};
-
-        //const retDes = (values: any) => {
-        //    const [quote, logo, news, chart] = values;
-        //    const quoteWithLogo = {...quote, logo: logo};
-        //    const nxtState = pushPrev (this.state, quoteWithLogo, news, chart);
-        //    this.setState (nxtState);
-        //};
-
-        /* Note: Promise.all([f, g, ...]) runs f, g, ... in parallel async */
-       // Promise.all ([
-       //            GetStockData (nxtSym, "stable", useToken),
-       //            GetStockLogo (nxtSym, "stable", useToken),
-       //            GetStockNews (nxtSym, "stable", useToken),
-       //            GetStockChar (nxtSym, "stable", useToken)
-       //        ])
-       //        .then (retDes)
-       //        .catch ((err: Error) => this.errCat (err, "GetQuote"));
-
     };
 
     onChangeEnteredSymbol = (event: any) => {
@@ -157,7 +124,7 @@ class App extends React.Component <IAppProps, IAppState> {
 
     onKeyDownPressEnter = (event: any) => {
         // noinspection MagicNumberJS
-        if (event.keyCode === 0xD) {
+        if (event.keyCode === 0x000D) {
             this.loadQuote ();
         }
     };
@@ -276,23 +243,17 @@ class App extends React.Component <IAppProps, IAppState> {
             }
         }
 
-        // <!--  <ChartLineGraph -->
-        //      title={enteredSymbol}
-        //      chartLabels={chartDates}
-        //      chartData={chartCloses}
-        //  />
 
-        // <h1 className="display-3">Stock Market App via React</h1>
         return (
             <div className="App pb-3">
                 <div className="jumbotron jumbotron-fluid bg-dark text-light">
                     <div className="container">
 
-                        <Heading as="h2" center color="gold" margin={0} italic underline xxLarge className={PageTitle}>
+                        <Heading as="h2" color="black" margin={0} italic underline xxLarge className={PageTitle}>
                             Stock Market App via React
                         </Heading>
 
-                        <Text color="gold" center italic large>
+                        <Text color="black" italic large>
                             Your new dashboard serving up just the latest stock data:
                             <a href="https://iexcloud.io">Data provided by IEX Cloud</a>
                         </Text>
