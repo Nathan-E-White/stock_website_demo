@@ -18,14 +18,8 @@ import ChartLineGraph from "./components/ChartLineGraph";
 import NewsList       from "./components/NewsList";
 import StockInfo      from "./components/StockInfo";
 
-
-//const FormEditor = require ("./components/FormEditor");
-
 // const redis = require ('redis');
 // const zmq = require ('zeromq');
-
-// const callProductionAPI: boolean = false;
-
 
 // noinspection JSUnusedLocalSymbols
 const apiSandboxToken: string = "Tpk_c86ba05004a64fd8b43b29929c446e2c";
