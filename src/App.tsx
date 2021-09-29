@@ -175,9 +175,7 @@ class App extends React.Component <IAppProps, IAppState> {
             chartReverseMin,
             quoteHistoryReverse,
             newsMin,
-            companyName,
-            chartCloses,
-            chartDates;
+            companyName;
 
         if (st) {
             if (st.quote) {
@@ -221,8 +219,8 @@ class App extends React.Component <IAppProps, IAppState> {
                 chart = st.chart;
                 chartReverse = [...chart].reverse ();
                 chartReverseMin = chartReverse.slice (0, 12);
-                chartCloses = [];
-                chartDates = [];
+                let chartCloses = [];
+                let chartDates = [];
                 chart.map ((chartItem: { label: any; close: any; }) => {
                     chartDates.push (chartItem.label);
                     chartCloses.push (chartItem.close);
