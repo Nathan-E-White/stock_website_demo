@@ -11,7 +11,7 @@ interface INewsItem {
 export const NewsItem = (ni: INewsItem) => {
     return (
         <div>
-            <a href={ni.url} target="_blank" rel="noreferrer"><h3>{ni.headline}</h3></a>
+            <a href={ni.url} target="_blank" rel="noreferrer" title={`Article via ${ni.source}`}><h3>{ni.headline}</h3></a>
             <div>
                 Source: <em>{ni.source}</em>, {ni.datetime.substring (0, 10)}
             </div>
