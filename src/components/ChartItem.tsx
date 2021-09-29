@@ -17,6 +17,7 @@ interface IChartItem {
 }
 
 export const ChartItem = (ci: IChartItem) => {
+    // noinspection MagicNumberJS
     return (
         <tr>
             <th scope="row">{ci.date}</th>
@@ -24,7 +25,7 @@ export const ChartItem = (ci: IChartItem) => {
             <td>{ci.high}</td>
             <td>{ci.low}</td>
             <td className={ci.stockIsUp ? 'text-success' : 'text-danger'}>
-                {ci.stockIsUp ? String.fromCharCode (9650) + ' ' + ci.close : String.fromCharCode () + ' ' + ci.close}
+                {ci.stockIsUp ? `${String.fromCharCode (9650)} ${ci.close}` : `${String.fromCharCode ()} ${ci.close}`}
             </td>
         </tr>
     );
