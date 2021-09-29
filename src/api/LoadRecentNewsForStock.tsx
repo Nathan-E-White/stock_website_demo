@@ -6,13 +6,21 @@ export const LoadRecentNewsForStock = (symbol: string, version: string, token: s
         baseURL: "https://cloud.iexapis.com/stable/"
     });
 
+    const apiGet = (res: any) => {
+        if (res.hasOwnProperty ("data")) {
+            return res.data;
+        } else {
+            throw Error (`API Error: GET request returned object but not desired data.`);
+        }
+    };
+
+    const errCat = (err: Error) => {
+        console.log (`API Error <LoadRecentNewsForStock>: ${err.message}`);
+    };
+
     return api.get (`stock/${symbol}/news?token=${token}`)
-              .then ((res: any): any => {
-                  return res.data;
-              }) // noinspection ChainedFunctionCallJS
-              .catch ((err: Error) => {
-                  console.log (`API Error <LoadRecentNewsForStock>: ${err.message}`);
-              });
+              .then (apiGet)
+              .catch (errCat);
 };
 
 export default LoadRecentNewsForStock;
