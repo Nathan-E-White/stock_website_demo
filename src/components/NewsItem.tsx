@@ -22,4 +22,5 @@ export const NewsItem = (ni: INewsItem) => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default NewsItem;
