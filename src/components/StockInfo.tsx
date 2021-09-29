@@ -32,4 +32,5 @@ export const StockInfo = (si: IStockInfo) => {
     );
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default StockInfo;
