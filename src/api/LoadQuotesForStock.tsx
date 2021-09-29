@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const LoadQuotesForStock = (symbol: string = "", version: string = "sandbox", token: string = "") => {
+export const LoadQuotesForStock = (symbol = "", version = "sandbox", token = "") => {
 
     const api = axios.create({
         baseURL: "https://cloud.iexapis.com/stable/"

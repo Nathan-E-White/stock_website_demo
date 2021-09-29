@@ -10,7 +10,7 @@ export const LoadRecentNewsForStock = (symbol: string, version: string, token: s
               .then ((res: any): any => {
                   return res.data;
               }) // noinspection ChainedFunctionCallJS
-              .catch ((err: Error): void => {
+              .catch ((err: Error) => {
                   console.log (`API Error <LoadRecentNewsForStock>: ${err.message}`);
               });
 };
