@@ -1,6 +1,6 @@
 import * as React from "react";
 
-const NewsItem = require("./NewsItem");
+import NewsItem from "./NewsItem";
 
 export const NewsList = ({news}: any) => (
     <div>{news.map ((newsItem: any, index: any) => {
