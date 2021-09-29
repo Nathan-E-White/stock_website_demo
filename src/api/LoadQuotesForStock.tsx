@@ -23,5 +23,6 @@ export const LoadQuotesForStock = (symbol = "", version = "sandbox", token = "")
               .catch (errCat);
 };
 
+// noinspection JSUnusedGlobalSymbols
 export default LoadQuotesForStock;
 
