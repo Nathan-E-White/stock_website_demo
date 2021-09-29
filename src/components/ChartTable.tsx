@@ -5,6 +5,7 @@ const ChartItem = require ("./ChartItem");
 export const ChartTable = ({chart}: any) => (
     <div>
         <table className="table">
+            <caption>Date and OHLC stock data</caption>
             <thead>
             <tr>
                 <th scope="col">Date</th>
