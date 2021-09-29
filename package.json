@@ -1,0 +1,10 @@
+{
+  "name": "rose_stock_demo_v1_0",
+  "version": "1.0.0",
+  "description": "A coding demonstration for a small webpage displaying stock quotes and such.",
+  "main": "src/index.tsx",
+  "repository": "https://github.com/Nathan-E-White/stock_website_demo.git",
+  "author": "Nathan-E-White <nwnn4@mail.missouri.edu>",
+  "license": "(c) University of Missouri, 2021. All rights reserved.",
+  "private": true
+}
