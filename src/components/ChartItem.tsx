@@ -23,7 +23,7 @@ export const ChartItem = (ci: IChartItem) => {
             <td>{ci.open}</td>
             <td>{ci.high}</td>
             <td>{ci.low}</td>
-            <td className={ci.stockIsUp ? 'text-sucess' : 'text-danger'}>
+            <td className={ci.stockIsUp ? 'text-success' : 'text-danger'}>
                 {ci.stockIsUp ? String.fromCharCode (9650) + ' ' + ci.close : String.fromCharCode () + ' ' + ci.close}
             </td>
         </tr>
