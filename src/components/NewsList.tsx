@@ -12,4 +12,5 @@ export const NewsList = ({news}: any) => (
     </div>
 );
 
+// noinspection JSUnusedGlobalSymbols
 export default NewsList;
