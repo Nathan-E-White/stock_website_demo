@@ -7,7 +7,6 @@ interface IChartLineGraph {
 }
 
 export const ChartLineGraph = (clg: IChartLineGraph) => {
-
     const cData: any = {
         labels:   clg.chartLabels,
         datasets: [{
@@ -17,9 +16,7 @@ export const ChartLineGraph = (clg: IChartLineGraph) => {
             borderColor:     ['rgba(255, 99, 132, 1)'],
             // borderWidth:     1
         }]
-    };
-
-    const cOptions: any = {
+    }, cOptions: any = {
         scales: {
             yAxes: [{
                 ticks: {

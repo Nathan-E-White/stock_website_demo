@@ -1,33 +1,25 @@
-import * as React     from 'react';
+import * as React      from 'react';
 // import * as Redis from "redis";
-
-import {css} from 'styled-components';
 import {Heading, Text} from "react-super-styled";
 
 // @ts-ignore
-import AppCss from  "./App.css";
+import AppCss     from "./App.css";
+import ChartTable from "./components/ChartTable";
+import NewsList   from "./components/NewsList";
+import StockInfo  from "./components/StockInfo";
 
-const PageTitle = AppCss.PageTitle;
+import Subtitle from "./components/Subtitle";
+import Title    from "./components/Title";
 
-import GetStockData   from "./api/LoadQuotesForStock";
-import GetStockLogo   from "./api/LoadLogoForStock";
-import GetStockNews   from "./api/LoadRecentNewsForStock";
-import GetStockChar   from "./api/LoadChartForStock";
-import ChartTable     from "./components/ChartTable";
-import ChartLineGraph from "./components/ChartLineGraph";
-import NewsList       from "./components/NewsList";
-import StockInfo      from "./components/StockInfo";
+import arrayPushHandler from "./util/ArrayPusher";
 
 // const redis = require ('redis');
 // const zmq = require ('zeromq');
 
-// noinspection JSUnusedLocalSymbols
-const apiSandboxToken: string = "Tpk_c86ba05004a64fd8b43b29929c446e2c";
-const productionToken: string = "pk_9d26fd1fee7d490986975ab1ef317b8b";
-const useToken = productionToken;
+
 
 interface IAppProps {
-//    redisHandle: any
+    apiToken: string;
 }
 
 interface IAppState {
@@ -44,6 +36,7 @@ interface IAppState {
     logo: string;
     logoURL: URL;
 }
+
 
 // noinspection JSClassNamingConvention
 class App extends React.Component <IAppProps, IAppState> {
@@ -66,7 +59,7 @@ class App extends React.Component <IAppProps, IAppState> {
             showAllNews:   false,
             showAllChart:  false,
             logo:          "",
-            logoURL:       new URL("https://www.google.com")
+            logoURL:       new URL ("https://www.google.com")
         };
     }
 
@@ -130,67 +123,52 @@ class App extends React.Component <IAppProps, IAppState> {
     };
 
     onClickShowHistory = () => {
-        this.setState ((prevState): any => {
-            const showHistory = prevState.showHistory;
+        const retHist = (pState: any) => {
+            const showHistory = pState.showHistory;
             return {
-                showHistory: !showHistory
+                showHistory: !showHistory,
             };
-        });
+        };
+
+        const nState: any = retHist (this.state);
+        this.setState (nState);
     };
 
     onClickShowAllChart = () => {
-        this.setState ((prevState: { showAllChart: any; }) => {
-            const showAllChart = prevState.showAllChart;
+
+        const retChar = (pState: any): any => {
+            const showAllChart = pState.showAllChart;
             return {
                 showAllChart: !showAllChart,
             };
-        });
+        };
+
+        const nState: any = retChar (this.state);
+        this.setState (nState);
     };
 
     onClickShowAllNews = () => {
-        this.setState ((prevState: { showAllNews: any; }) => {
-            const showAllNews = prevState.showAllNews;
+        const retNews = (pState: any): any => {
             return {
-                showAllNews: !showAllNews,
+                showAllNews: !(pState.showAllNews),
             };
-        });
+        };
+
+        const nState: any = retNews (this.state);
+        this.setState (nState);
     };
 
-
-    render (): JSX.Element {
+    render () {
 
         const st: IAppState = this.state;
 
-        let
-            quote,
-            enteredSymbol,
-            quoteHistory,
-            showHistory,
-            news,
-            showAllNews,
-            chart,
-            showAllChart,
-            error,
-            chartReverse,
+        let quoteHistory,
             chartReverseMin,
-            quoteHistoryReverse,
-            newsMin,
-            companyName;
+            quoteHistoryReverse;
 
-        if (st) {
-            if (st.quote) {
-                quote = st.quote;
-                companyName = !!quote && quote.companyName;
-            }
-
-        }
-
-        if (st) {
-            if (st.enteredSymbol) {
-                enteredSymbol = st.enteredSymbol;
-            }
-
-        }
+        const quote = st?.quote;
+        const companyName = quote?.companyName;
+        const enteredSymbol = st?.enteredSymbol;
 
         if (st && st.quoteHistory) {
             quoteHistory = st.quoteHistory;
@@ -200,178 +178,114 @@ class App extends React.Component <IAppProps, IAppState> {
             quoteHistoryReverse = [];
         }
 
-        if (st && st.showHistory) {
-            showHistory = st.showHistory;
-        }
-        if (st) {
-            if (st.news) {
-                news = st.news;
-                newsMin = [...news].slice (0, 2);
-            }
-        }
-        if (st) {
-            if (st.showAllNews) {
-                showAllNews = st.showAllNews;
-            }
-        }
-        if (st) {
-            if (st.chart) {
-                chart = st.chart;
-                chartReverse = [...chart].reverse ();
-                chartReverseMin = chartReverse.slice (0, 12);
-                const chartCloses = [];
-                const chartDates = [];
-                chart.map ((chartItem: { label: any; close: any; }) => {
-                    chartDates.push (chartItem.label);
-                    chartCloses.push (chartItem.close);
-                    return null;
-                });
-            }
-        }
-        if (st) {
-            if (st.showAllChart) {
+        const showHistory = st?.showHistory;
+        const news = st?.news;
+        const newsMin = [...st?.news].slice (0, 2);
+        const showAllNews = st?.showAllNews;
 
-                showAllChart = st.showAllChart;
-            }
-        }
-        if (st) {
+        /* TODO: better type handling */
+        const chartCloses: any[] = [];
+        const chartDates: any[] = [];
 
-            if (st.error) {
-                error = st.error;
-            }
+        const chartMapPusher = (chartItem: { label: any; close: any; }): null => {
+            arrayPushHandler (chartDates, chartItem.label);
+            arrayPushHandler (chartCloses, chartItem.close);
+            return null;
+        };
+
+        const chart: any[] = st?.chart;
+        const chartReverse: any[] | undefined = [...chart]?.reverse ();
+        if (chart && chartReverse) {
+            // noinspection MagicNumberJS
+            chartReverseMin = chartReverse.slice (0, 12);
+        }
+        chart.map (chartMapPusher);
+
+        const showAllChart = st?.showAllChart;
+        const error = st?.error;
+
+        let historyLabel, newsLabel, chartLabel, quoteDisplay;
+        if (showHistory) {
+            historyLabel = "Show Previous Quotes";
+        } else {
+            historyLabel = "Hide Previous Quotes";
         }
 
+        if (showAllNews) {
+            newsLabel = "Show All";
+        } else {
+            newsLabel = "Show Less";
+        }
+
+        if (showAllChart) {
+            chartLabel = "ShowAll";
+        } else {
+            chartLabel = "Show Less";
+        }
+
+        if (quote) {
+            quoteDisplay = <StockInfo {...quote} logo={this.state.logo}/>;
+        } else {
+            quoteDisplay = <p>Loading...</p>;
+        }
+
+
+        const quoteReverseMapper = (quoteHistoryItem: any, index: number) => {
+            return <div key={`quote + ${index}`}>
+                <StockInfo {...quoteHistoryItem} />
+                <hr/>
+            </div>;
+        };
 
         return (
-            <div className="App pb-3">
-                <div className="jumbotron jumbotron-fluid bg-dark text-light">
-                    <div className="container">
+            <div className="App">
+                <Title/>
+                <Subtitle/>
 
-                        <Heading as="h2" color="black" margin={0} italic underline xxLarge className={PageTitle}>
-                            Stock Market App via React
-                        </Heading>
+                <input
+                    value={enteredSymbol}
+                    type="text"
+                    placeholder="Symbol e.g. XOM"
+                    aria-label="Symbol"
+                    onChange={this.onChangeEnteredSymbol}
+                    onKeyDown={this.onKeyDownPressEnter}
+                />
 
-                        <Text color="black" italic large>
-                            Your new dashboard serving up just the latest stock data:
-                            <a
-                                href="https://iexcloud.io"
-                                title="IEX Required data disclaimer.">
-                                Data provided by IEX Cloud
-                            </a>
-                        </Text>
+                <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={this.loadQuote}
+                >
+                    Load Quote
+                </button>
 
-                        <div className="row">
-                            <div className="col input-group">
-                                <input
-                                    value={enteredSymbol}
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Symbol e.g. XOM"
-                                    aria-label="Symbol"
-                                    onChange={this.onChangeEnteredSymbol}
-                                    onKeyDown={this.onKeyDownPressEnter}
-                                />
-                                <span className="input-group-btn">
-                                    <button
-                                        className="btn btn-secondary"
-                                        type="button"
-                                        onClick={this.loadQuote}
-                                    >
-                                        Load Quote
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
+                {!!error && (
+                    <div className="col alert alert-danger" role="alert">
+                        <h4>Whoops! This isn&apos;t supposed to happen...</h4>
+                        <p>{error.message}</p>
                     </div>
-                </div>
+                )}
 
-                <div className="container-fluid">
-                    <div className="row">
-                        {!!error && (
-                            <div className="col alert alert-danger" role="alert">
-                                <h4 className="alert-heading">Whoops! This isn&apos;t supposed to happen...</h4>
-                                <p>{error.message}</p>
-                            </div>
-                        )}
-                    </div>
+                <h2>Latest Quote</h2>
+                {quoteDisplay}
 
-                    <div className="row mt-3">
-                        <div className="col">
-                            <h2>Latest Quote</h2>
-                            {!!quote ? <StockInfo {...quote} logo={this.state.logo}/> : <p>Loading...</p>}
+                <button onClick={this.onClickShowHistory}>{historyLabel}</button>
 
-                            <div className="mt-3">
-                                <button
-                                    className="btn btn-dark btn-block"
-                                    onClick={this.onClickShowHistory}
-                                >
-                                    {showHistory
-                                        ? "Hide Previous Quotes"
-                                        : "Show Previous Quotes"}
-                                </button>
-                            </div>
+                <h2>Previous Quotes</h2>
+                {quoteHistoryReverse.map (quoteReverseMapper)}
 
-                            <div className="mt-3">
-                                {showHistory && !!quoteHistory && (
-                                    <div>
-                                        <h2 className="text-center">Previous Quotes</h2>
-                                        {quoteHistoryReverse.map ((quoteHistoryItem, index) => {
-                                            return (
-                                                <div key={`quote + ${index}`}>
-                                                    <StockInfo {...quoteHistoryItem} />
-                                                    <hr/>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
+                <h2>{`News about " + ${companyName}`}</h2>
+                {!showAllNews && !!newsMin && <NewsList news={newsMin}/>}
+                {showAllNews && !!news && (<NewsList news={news}/>)}
 
-                            <div className="mt-5">
-                                <h2>{!!companyName && `News about " + ${companyName}`}</h2>
-                                {!showAllNews && !!newsMin && <NewsList news={newsMin}/>}
-                                {showAllNews && !!news && (
-                                    <div>
-                                        <NewsList news={news}/>
-                                    </div>
-                                )}
-                                <button
-                                    className="btn btn-dark btn-block"
-                                    onClick={this.onClickShowAllNews}
-                                >
-                                    {showAllNews ? "Show Less" : "Show All"}
-                                </button>
-                            </div>
-                        </div>
+                <button onClick={this.onClickShowAllNews}>{newsLabel}</button>
 
-                        <div className="col">
-                            {!!chart && (
-                                <div className="charts">
-                                    <h2 className="text-center">
-                                        {!!companyName && `${companyName} (Past 6 months)`}
-                                    </h2>
+                {!!chart && (<h2>{!!companyName && `${companyName} (Past 6 months)`}</h2>)}
 
+                {!showAllChart && !!chartReverseMin && (<ChartTable chart={chartReverseMin}/>)}
+                {showAllChart && !!chartReverse && (<ChartTable chart={chartReverse}/>)}
 
-                                </div>
-                            )}
-
-                            <div className="mt-3">
-                                {!showAllChart && !!chartReverseMin && (
-                                    <ChartTable chart={chartReverseMin}/>
-                                )}
-                                {showAllChart && !!chartReverse && (
-                                    <ChartTable chart={chartReverse}/>
-                                )}
-                                <button
-                                    className="btn btn-dark btn-block"
-                                    onClick={this.onClickShowAllChart}
-                                >
-                                    {showAllChart ? "Show Less" : "Show All"}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button onClick={this.onClickShowAllChart}>{chartLabel}</button>
             </div>
         );
     }
